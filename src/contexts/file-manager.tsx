@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { SelectFile } from "../@types/files";
+import { Folder, SelectFile } from "../@types/files";
 import { r2ListResponse } from "../../data";
 
 type FileManagerContextProps = {
@@ -9,7 +9,7 @@ type FileManagerContextProps = {
   setCurrentFolder: React.Dispatch<
     React.SetStateAction<SelectFile | undefined>
   >;
-  folders: (SelectFile | undefined)[];
+  folders: Folder;
   files: SelectFile[] | null;
   activePreview: boolean;
   setActivePreview: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,9 +40,7 @@ const FileManagerProvider = ({ children }: { children: React.ReactNode }) => {
     return !file.isDir;
   });
 
-  const folders = organized.filter((file) => {
-    return file.isDir;
-  });
+  const folders = buildFolderStructure(files);
 
   return (
     <FileManagerContext.Provider
@@ -116,6 +114,33 @@ const organizeFiles = (
   });
 
   return files;
+};
+
+const buildFolderStructure = (files: SelectFile[]): Folder => {
+  const root: Folder = { id: "root", name: "Root", folders: [] };
+
+  files.forEach((file) => {
+    const pathParts = file.path.split("/").filter(Boolean); // Divide e remove strings vazias
+    let currentFolder = root;
+
+    for (let i = 0; i < pathParts.length; i++) {
+      const part = pathParts[i];
+      const isFile = part.includes("."); // Arquivo termina com extensão
+
+      if (isFile) break; // Se for um arquivo, ignoramos a criação de pastas
+
+      let existingFolder = currentFolder.folders.find((f) => f.name === part);
+
+      if (!existingFolder) {
+        existingFolder = { id: file.id, name: part, folders: [] };
+        currentFolder.folders.push(existingFolder);
+      }
+
+      currentFolder = existingFolder;
+    }
+  });
+
+  return root;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

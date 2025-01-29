@@ -8,6 +8,12 @@ export type SelectFile = {
   lastModified?: string;
 };
 
+export type Folder = {
+  id: string;
+  name: string;
+  folders: Folder[];
+};
+
 // Tipagem do retorno do put
 export interface R2Object {
   key: string;
