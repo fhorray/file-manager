@@ -232,6 +232,21 @@ export const r2ListResponse: R2ObjectsList = {
         author: 'Arq. Pedro Santos',
       },
     },
+    {
+      key: 'files/properties/estacao-oratorio/fachada/image5.jpg',
+      size: 204800,
+      etag: 'i9j0k1l2',
+      version: 'v1.2',
+      uploaded: new Date('2024-01-27T10:45:00Z'),
+      httpMetadata: {
+        'content-type': 'image/jpeg',
+        'cache-control': 'max-age=1800',
+      },
+      customMetadata: {
+        description: 'Planta baixa do projeto Estação Oratório',
+        author: 'Arq. Pedro Santos',
+      },
+    },
   ],
   truncated: false,
   cursor: null,

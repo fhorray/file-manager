@@ -1,15 +1,16 @@
-import { FolderIcon } from 'lucide-react';
+import { ChevronRight, FolderIcon, FileIcon } from 'lucide-react';
 import { Folder } from '../@types/files';
 import { useFileManager } from '../contexts/file-manager';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
 import { Button } from './ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FolderTree = () => {
   const { folders } = useFileManager();
 
   return (
-    <ul>
+    <ul className="space-y-2">
       {folders.folders.map((folder) => (
         <FolderRenderer key={folder.id} folder={folder} />
       ))}
@@ -21,46 +22,77 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
   const [expanded, setExpanded] = useState(false);
   const { setPath, path } = useFileManager();
 
+  const hasSubfolders = folder.folders && folder.folders.length > 0;
+  const hasFiles = folder.files && folder.files.length > 0;
+
   return (
-    <li className="">
+    <li className="list-none">
       <div
         className={cn(
-          'flex items-center gap-4 w-full p-2 border-2 border-transparent select-none rounded-lg',
-          expanded
-            ? 'border border-gray-300 hover:bg-gray-300 transition-all'
-            : 'flex items-center gap-4',
-          path === folder.path &&
-            'bg-gray-300 hover:bg-gray-400 hover:text-gray-700',
+          'select-none flex items-center gap-2 w-full p-2 rounded-md transition-all duration-200 ease-in-out cursor-pointer',
+          path === folder.path
+            ? 'bg-blue-100 text-blue-800'
+            : 'hover:bg-gray-200',
         )}
+        onClick={() => {
+          setPath(folder.path);
+          if (hasSubfolders) {
+            setExpanded(!expanded);
+          }
+        }}
       >
         <Button
-          className="hover:bg-gray-400"
-          variant={'ghost'}
-          size={'icon'}
-          onClick={() => {
-            if (folder.folders.length) {
-              setExpanded(!expanded);
-            }
-            setPath(folder.path);
-          }}
+          className="p-0 hover:bg-transparent"
+          variant="ghost"
+          size="icon"
         >
-          <FolderIcon className={cn('', expanded && 'fill-gray-500')} />
+          <motion.div
+            animate={{ rotate: expanded ? 90 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ChevronRight
+              className={cn('w-4 h-4', !hasSubfolders && 'opacity-0')}
+            />
+          </motion.div>
         </Button>
-        {folder.name}
+        <FolderIcon
+          className={cn(
+            'w-5 h-5',
+            expanded ? 'text-blue-500' : 'text-yellow-500',
+          )}
+        />
+        <span className="text-sm font-medium">
+          {folder.name.charAt(0).toUpperCase() + folder.name.slice(1)}
+        </span>
       </div>
 
-      {/* Render subfolders recursively if they exist */}
-      {expanded && (
-        <>
-          {folder.folders && folder.folders.length > 0 && (
-            <ul className={cn('', expanded && 'pl-4')}>
-              {folder.folders.map((subfolder) => (
-                <FolderRenderer key={subfolder.id} folder={subfolder} />
-              ))}
-            </ul>
-          )}
-        </>
-      )}
+      <AnimatePresence>
+        {expanded && (hasSubfolders || hasFiles) && (
+          <motion.ul
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="pl-4 mt-1 space-y-1"
+          >
+            {folder.folders?.map((subfolder) => (
+              <FolderRenderer key={subfolder.id} folder={subfolder} />
+            ))}
+            {folder.files?.map((file) => (
+              <FileRenderer key={file.id} file={file} />
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </li>
+  );
+};
+
+const FileRenderer = ({ file }: { file: { id: string; name: string } }) => {
+  return (
+    <li className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 transition-all duration-200 ease-in-out cursor-pointer">
+      <FileIcon className="w-4 h-4 text-gray-500" />
+      <span className="text-sm">{file.name}</span>
     </li>
   );
 };
