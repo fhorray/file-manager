@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
-import { Folder, SelectFile } from "../@types/files";
-import { r2ListResponse } from "../../data";
+import React, { createContext, useContext, useState } from 'react';
+import { Folder, SelectFile } from '../@types/files';
+import { r2ListResponse } from '../../data';
 
 type FileManagerContextProps = {
   path: string;
@@ -16,15 +16,15 @@ type FileManagerContextProps = {
 };
 
 const FileManagerContext = createContext<FileManagerContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 const FileManagerProvider = ({ children }: { children: React.ReactNode }) => {
   const [activePreview, setActivePreview] = useState(false);
 
-  const [currentPath, setCurrentPath] = useState("/");
+  const [currentPath, setCurrentPath] = useState('/');
   const [currentFolder, setCurrentFolder] = useState<SelectFile | undefined>(
-    undefined
+    undefined,
   );
 
   const mapped = r2ListResponse.objects.map((file) => {
@@ -68,19 +68,19 @@ const useFileManager = () => {
 
 // function to organize file keys
 const organizeFiles = (
-  keys: { key: string; size?: number; lastModified?: string }[]
+  keys: { key: string; size?: number; lastModified?: string }[],
 ): SelectFile[] => {
   const files: SelectFile[] = [];
   const dirMap = new Map<string, string>(); // Mapeia caminhos para IDs
 
   keys.forEach(({ key, size, lastModified }) => {
-    const parts = key.split("/");
+    const parts = key.split('/');
     let parentId: string | undefined = undefined;
-    let currentPath = "";
+    let currentPath = '';
 
     for (let i = 0; i < parts.length; i++) {
       const name = parts[i];
-      currentPath += (i > 0 ? "/" : "") + name;
+      currentPath += (i > 0 ? '/' : '') + name;
       const isLast = i === parts.length - 1;
       const id = btoa(currentPath); // Criando um ID único com Base64
 
@@ -115,28 +115,46 @@ const organizeFiles = (
 
   return files;
 };
-
 const buildFolderStructure = (files: SelectFile[]): Folder => {
-  const root: Folder = { id: "root", name: "Root", folders: [] };
+  const root: Folder = {
+    id: 'root',
+    name: 'Root',
+    path: '',
+    files: [],
+    folders: [],
+  };
 
   files.forEach((file) => {
-    const pathParts = file.path.split("/").filter(Boolean); // Divide e remove strings vazias
+    const pathParts = file.path.split('/').filter(Boolean); // Divide e remove strings vazias
+    pathParts.shift(); // remove 'files/' from URL
+    const fileName = pathParts.pop(); // Remove nome do arquivo do path
+
     let currentFolder = root;
 
     for (let i = 0; i < pathParts.length; i++) {
       const part = pathParts[i];
-      const isFile = part.includes("."); // Arquivo termina com extensão
-
-      if (isFile) break; // Se for um arquivo, ignoramos a criação de pastas
-
+      const isFile = fileName && part === fileName; // Verifica se o caminho é o nome do arquivo
       let existingFolder = currentFolder.folders.find((f) => f.name === part);
 
       if (!existingFolder) {
-        existingFolder = { id: file.id, name: part, folders: [] };
+        // Se não existe a pasta, criamos uma nova
+        existingFolder = {
+          id: file.id,
+          name: part,
+          path: currentFolder.path + part + '/',
+          files: [], // Inicialmente sem arquivos
+          folders: [],
+        };
         currentFolder.folders.push(existingFolder);
       }
 
       currentFolder = existingFolder;
+
+      // Se for um arquivo, adiciona ao array de arquivos da pasta atual
+      if (isFile) {
+        currentFolder.files.push(file);
+        break; // Não precisamos continuar procurando mais pastas
+      }
     }
   });
 

@@ -1,10 +1,12 @@
-import { SearchIcon, PanelTopCloseIcon } from "lucide-react";
-import { Input } from "./ui/input";
+import { SearchIcon, PanelTopCloseIcon } from 'lucide-react';
+import { Input } from './ui/input';
 
-import { Button } from "./ui/button";
-import FolderTree from "./folder-tree";
+import { Button } from './ui/button';
+import FolderTree from './folder-tree';
+import { useFileManager } from '../contexts/file-manager';
 
 const Sidebar = () => {
+  const { path } = useFileManager();
   const filterFiles = (value: string) => {
     console.log(value);
     // Implement file filtering logic here
@@ -23,12 +25,15 @@ const Sidebar = () => {
       </div>
       {/* OPTIONS */}
       <div>
-        <Button size={"icon"} variant={"outline"}>
+        <Button size={'icon'} variant={'outline'}>
           <PanelTopCloseIcon />
         </Button>
       </div>
 
       {/* FOLDER TREE */}
+      <span>
+        Current path: <strong>{path}</strong>
+      </span>
       <FolderTree />
     </aside>
   );

@@ -1,4 +1,4 @@
-import FileManager from './components/file-manager';
+import FileManager from './components';
 import { FileManagerProvider } from './contexts/file-manager';
 
 function App() {

@@ -11,6 +11,8 @@ export type SelectFile = {
 export type Folder = {
   id: string;
   name: string;
+  path: string;
+  files: SelectFile[];
   folders: Folder[];
 };
 
