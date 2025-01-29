@@ -1,9 +1,11 @@
-import Sidebar from './sidebar';
+import FileManagerGrid from "./file-manager-grid";
+import Sidebar from "./sidebar";
 
 const FileManager = () => {
   return (
-    <main>
+    <main className="flex">
       <Sidebar />
+      <FileManagerGrid />
     </main>
   );
 };

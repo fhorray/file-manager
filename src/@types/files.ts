@@ -8,12 +8,6 @@ export type SelectFile = {
   lastModified?: string;
 };
 
-// Tipagem para o método put
-export interface R2PutOptions {
-  httpMetadata?: HeadersInit;
-  customMetadata?: Record<string, string>;
-}
-
 // Tipagem do retorno do put
 export interface R2Object {
   key: string;

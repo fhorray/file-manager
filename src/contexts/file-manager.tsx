@@ -1,20 +1,31 @@
-import React, { createContext, useContext, useState } from 'react';
-import { SelectFile } from '../@types/files';
-import { r2ListResponse } from '../../data';
+import React, { createContext, useContext, useState } from "react";
+import { SelectFile } from "../@types/files";
+import { r2ListResponse } from "../../data";
 
 type FileManagerContextProps = {
   path: string;
   setPath: React.Dispatch<React.SetStateAction<string>>;
+  currentFolder: SelectFile | undefined;
+  setCurrentFolder: React.Dispatch<
+    React.SetStateAction<SelectFile | undefined>
+  >;
   folders: (SelectFile | undefined)[];
   files: SelectFile[] | null;
+  activePreview: boolean;
+  setActivePreview: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const FileManagerContext = createContext<FileManagerContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 const FileManagerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentPath, setCurrentPath] = useState('/');
+  const [activePreview, setActivePreview] = useState(false);
+
+  const [currentPath, setCurrentPath] = useState("/");
+  const [currentFolder, setCurrentFolder] = useState<SelectFile | undefined>(
+    undefined
+  );
 
   const mapped = r2ListResponse.objects.map((file) => {
     return {
@@ -40,9 +51,13 @@ const FileManagerProvider = ({ children }: { children: React.ReactNode }) => {
         setPath: setCurrentPath,
         files,
         folders,
+        currentFolder,
+        setCurrentFolder,
+        activePreview,
+        setActivePreview,
       }}
     >
-       {children}
+      {children}
     </FileManagerContext.Provider>
   );
 };
@@ -55,19 +70,19 @@ const useFileManager = () => {
 
 // function to organize file keys
 const organizeFiles = (
-  keys: { key: string; size?: number; lastModified?: string }[],
+  keys: { key: string; size?: number; lastModified?: string }[]
 ): SelectFile[] => {
   const files: SelectFile[] = [];
   const dirMap = new Map<string, string>(); // Mapeia caminhos para IDs
 
   keys.forEach(({ key, size, lastModified }) => {
-    const parts = key.split('/');
+    const parts = key.split("/");
     let parentId: string | undefined = undefined;
-    let currentPath = '';
+    let currentPath = "";
 
     for (let i = 0; i < parts.length; i++) {
       const name = parts[i];
-      currentPath += (i > 0 ? '/' : '') + name;
+      currentPath += (i > 0 ? "/" : "") + name;
       const isLast = i === parts.length - 1;
       const id = btoa(currentPath); // Criando um ID único com Base64
 
@@ -103,4 +118,5 @@ const organizeFiles = (
   return files;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { useContext, useFileManager, FileManagerContext, FileManagerProvider };
