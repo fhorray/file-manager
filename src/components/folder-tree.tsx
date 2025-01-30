@@ -3,7 +3,6 @@ import { Folder } from '../@types/files';
 import { useFileManager } from '../contexts/file-manager';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
-import { Button } from './ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FolderTree = () => {
@@ -41,11 +40,7 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
           }
         }}
       >
-        <Button
-          className="p-0 hover:bg-transparent"
-          variant="ghost"
-          size="icon"
-        >
+        <button className="p-0 hover:bg-transparent">
           <motion.div
             animate={{ rotate: expanded ? 90 : 0 }}
             transition={{ duration: 0.2 }}
@@ -54,11 +49,13 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
               className={cn('w-4 h-4', !hasSubfolders && 'opacity-0')}
             />
           </motion.div>
-        </Button>
+        </button>
         <FolderIcon
           className={cn(
             'w-5 h-5',
-            expanded ? 'text-blue-500' : 'text-yellow-500',
+            expanded || path === folder.path
+              ? 'text-blue-500'
+              : 'text-yellow-500',
           )}
         />
         <span className="text-sm font-medium">

@@ -1,4 +1,4 @@
-export type SelectFile = {
+export type File = {
   id: string;
   name: string;
   path: string;
@@ -12,7 +12,7 @@ export type Folder = {
   id: string;
   name: string;
   path: string;
-  files: SelectFile[];
+  files: File[];
   folders: Folder[];
 };
 

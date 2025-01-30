@@ -5,7 +5,7 @@ const FileManagerGrid = () => {
   const { files, path } = useFileManager();
 
   return (
-    <main className="p-4 w-full grid grid-cols-4 gap-4 grid-rows-3">
+    <main className="w-full h-full grid grid-cols-4 gap-4 grid-rows-3">
       {files?.map((file) => {
         const fileName = file.path.split('/');
         fileName.pop(); // remove last item which is the file name temrinating in .jpg/.jpg etc...

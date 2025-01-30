@@ -173,6 +173,21 @@ export const r2ListResponse: R2ObjectsList = {
       },
     },
     {
+      key: 'files/properties/butantan/image67.jpg',
+      size: 52428834,
+      etag: 'a1b2c3d4',
+      version: 'v1.0',
+      uploaded: new Date('2024-01-29T12:00:00Z'),
+      httpMetadata: {
+        'content-type': 'image/jpeg',
+        'cache-control': 'max-age=3600',
+      },
+      customMetadata: {
+        description: 'Planta baixa do projeto Butantã',
+        author: 'Arq. João Silva',
+      },
+    },
+    {
       key: 'files/properties/9-de-julho/plantas/image2.jpg',
       size: 102400,
       etag: 'e5f6g7h8',

@@ -1,15 +1,15 @@
-import { ReactNode } from "react";
-import { useFileManager } from "../contexts/file-manager";
-import { Button } from "./ui/button";
-import { ImageIcon, XIcon } from "lucide-react";
-import { SelectFile } from "../@types/files";
+import { ReactNode } from 'react';
+import { useFileManager } from '../contexts/file-manager';
+import { Button } from './ui/button';
+import { ImageIcon, XIcon } from 'lucide-react';
+import { File } from '../@types/files';
 
 const FileManagerPreview = ({
   children,
   file,
 }: {
   children: ReactNode;
-  file: SelectFile;
+  file: File;
 }) => {
   const { activePreview, setActivePreview } = useFileManager();
 
@@ -36,8 +36,8 @@ const FileManagerPreview = ({
               onClick={() => {
                 setActivePreview(!activePreview);
               }}
-              variant={"outline"}
-              size={"icon"}
+              variant={'outline'}
+              size={'icon'}
               className="rounded-full right-4 top-4 absolute"
             >
               <XIcon />
