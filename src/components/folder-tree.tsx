@@ -1,9 +1,9 @@
-import { ChevronRight, FolderIcon, FileIcon } from 'lucide-react';
-import { Folder } from '../@types/files';
-import { useFileManager } from '../contexts/file-manager';
-import { useState } from 'react';
-import { cn } from '../lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronRight, FolderIcon, FileIcon } from "lucide-react";
+import { Folder } from "../@types/files";
+import { useFileManager } from "../contexts/file-manager";
+import { useState } from "react";
+import { cn } from "../lib/utils";
+import { motion, AnimatePresence } from "motion/react";
 
 const FolderTree = () => {
   const { folders } = useFileManager();
@@ -28,10 +28,10 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
     <li className="list-none">
       <div
         className={cn(
-          'select-none flex items-center gap-2 w-full p-2 rounded-md transition-all duration-200 ease-in-out cursor-pointer',
+          "select-none flex items-center gap-2 w-full p-2 rounded-md transition-all duration-200 ease-in-out cursor-pointer",
           path === folder.path
-            ? 'bg-blue-100 text-blue-800'
-            : 'hover:bg-gray-200',
+            ? "bg-blue-100 text-blue-800"
+            : "hover:bg-gray-200"
         )}
         onClick={() => {
           setPath(folder.path);
@@ -46,16 +46,16 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
             transition={{ duration: 0.2 }}
           >
             <ChevronRight
-              className={cn('w-4 h-4', !hasSubfolders && 'opacity-0')}
+              className={cn("w-4 h-4", !hasSubfolders && "opacity-0")}
             />
           </motion.div>
         </button>
         <FolderIcon
           className={cn(
-            'w-5 h-5',
+            "w-5 h-5",
             expanded || path === folder.path
-              ? 'text-blue-500'
-              : 'text-yellow-500',
+              ? "text-blue-500"
+              : "text-yellow-500"
           )}
         />
         <span className="text-sm font-medium">
@@ -67,7 +67,7 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
         {expanded && (hasSubfolders || hasFiles) && (
           <motion.ul
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="pl-4 mt-1 space-y-1"

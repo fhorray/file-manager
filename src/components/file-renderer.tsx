@@ -1,14 +1,14 @@
-import { ImageIcon, Trash2Icon } from 'lucide-react';
-import { File } from '../@types/files';
-import FileManagerPreview from './file-manager-preview';
+import { ImageIcon, Trash2Icon } from "lucide-react";
+import { File } from "../@types/files";
+import FileManagerPreview from "./file-manager-preview";
 
-import { useFileManager } from '../contexts/file-manager';
-import { Checkbox } from './ui/checkbox';
+import { useFileManager } from "../contexts/file-manager";
+import { Checkbox } from "./ui/checkbox";
 
-const FileRenderer = ({ file }: { file: File }) => {
+export const FileRenderer = ({ file }: { file: File }) => {
   const { selectedFiles, setSelectedFiles } = useFileManager();
   return (
-    <div className="w-full h-full border border-gray-300 rounded-xl relative cursor-pointer">
+    <div className="w-full h-full border border-gray-300 rounded-xl relative cursor-pointer group">
       {/* OPTIONS */}
       <button
         className="absolute right-2 top-2 p-1 hover:bg-gray-200 transition-all rounded-md"
@@ -44,5 +44,3 @@ const FileRenderer = ({ file }: { file: File }) => {
     </div>
   );
 };
-
-export default FileRenderer;
