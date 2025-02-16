@@ -7,7 +7,7 @@ export const organizeFiles = (
   const files: File[] = [];
   const dirMap = new Map<string, string>(); // Mapeia caminhos para IDs
 
-  keys.forEach(({ key, size, lastModified }) => {
+  keys?.forEach(({ key, size, lastModified }) => {
     const parts = key.split('/');
     let parentId: string | undefined = undefined;
     let currentPath = '';
@@ -59,7 +59,7 @@ export const buildFolderStructure = (files: File[]): Folder => {
     folders: [],
   };
 
-  files.forEach((file) => {
+  files?.forEach((file) => {
     const pathParts = file.path.split('/').filter(Boolean); // Divide e remove strings vazias
     pathParts.shift(); // remove 'files/' from URL
     const fileName = pathParts.pop(); // Remove nome do arquivo do path
@@ -94,4 +94,21 @@ export const buildFolderStructure = (files: File[]): Folder => {
   });
 
   return root;
+};
+
+export const formatBytes = (
+  bytes: number | string,
+  decimals?: number,
+): string => {
+  const parsed = typeof bytes === 'string' ? parseInt(bytes) : bytes;
+
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals ?? 2 < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(parsed) / Math.log(k));
+
+  const value = parseFloat((parsed / Math.pow(k, i)).toFixed(dm));
+  return `${value} ${sizes[i]}`;
 };

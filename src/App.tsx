@@ -1,10 +1,17 @@
 import FileManager from './components';
-import { FileManagerProvider } from './contexts/file-manager';
+import {
+  FileManagerConfig,
+  FileManagerProvider,
+} from './contexts/file-manager';
+
+const config = {
+  baseUrl: 'https://media.grupometrocasa.com',
+} satisfies FileManagerConfig;
 
 function App() {
   return (
     <>
-      <FileManagerProvider>
+      <FileManagerProvider config={config}>
         <FileManager />
       </FileManagerProvider>
     </>

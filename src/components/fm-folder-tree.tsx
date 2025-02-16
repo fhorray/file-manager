@@ -5,21 +5,21 @@ import { useState } from 'react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const FolderTree = () => {
+export const FolderTree = () => {
   const { folders } = useFileManager();
 
   return (
     <ul className="space-y-2">
-      {folders.folders.map((folder) => (
+      {folders.list.folders.map((folder) => (
         <FolderRenderer key={folder.id} folder={folder} />
       ))}
     </ul>
   );
 };
 
-const FolderRenderer = ({ folder }: { folder: Folder }) => {
+export const FolderRenderer = ({ folder }: { folder: Folder }) => {
   const [expanded, setExpanded] = useState(false);
-  const { setPath, path } = useFileManager();
+  const { path, selectedFiles } = useFileManager();
 
   const hasSubfolders = folder.folders && folder.folders.length > 0;
   const hasFiles = folder.files && folder.files.length > 0;
@@ -29,14 +29,15 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
       <div
         className={cn(
           'select-none flex items-center gap-2 w-full p-2 rounded-md transition-all duration-200 ease-in-out cursor-pointer',
-          path === folder.path
+          path.current === folder.path
             ? 'bg-blue-100 text-blue-800'
             : 'hover:bg-gray-200',
         )}
         onClick={() => {
-          setPath(folder.path);
+          path.set(folder.path);
           if (hasSubfolders) {
             setExpanded(!expanded);
+            selectedFiles.clear();
           }
         }}
       >
@@ -53,7 +54,7 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
         <FolderIcon
           className={cn(
             'w-5 h-5',
-            expanded || path === folder.path
+            expanded || path.current === folder.path
               ? 'text-blue-500'
               : 'text-yellow-500',
           )}
@@ -85,7 +86,11 @@ const FolderRenderer = ({ folder }: { folder: Folder }) => {
   );
 };
 
-const FileRenderer = ({ file }: { file: { id: string; name: string } }) => {
+export const FileRenderer = ({
+  file,
+}: {
+  file: { id: string; name: string };
+}) => {
   return (
     <li className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 transition-all duration-200 ease-in-out cursor-pointer">
       <FileIcon className="w-4 h-4 text-gray-500" />
@@ -93,5 +98,3 @@ const FileRenderer = ({ file }: { file: { id: string; name: string } }) => {
     </li>
   );
 };
-
-export default FolderTree;
