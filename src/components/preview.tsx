@@ -1,10 +1,10 @@
-import { useFileManager } from '../contexts/file-manager';
-import { XIcon } from 'lucide-react';
+import { XIcon } from "lucide-react";
 
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from "motion/react";
+import { useDosya } from "../stores/dosya-store";
 
-export const FileManagerPreview = () => {
-  const { preview, context } = useFileManager();
+export const FilePreview = () => {
+  const { preview, context } = useDosya();
 
   const backdropVariants = {
     hidden: {
@@ -80,7 +80,7 @@ export const FileManagerPreview = () => {
                 />
 
                 {/* IMG BLUR BACKGROUND BLURED */}
-                {!preview.file?.path.endsWith('.png') ? (
+                {!preview.file?.path.endsWith(".png") ? (
                   <img
                     src={`${context.baseUrl}/${preview.file?.path}`}
                     className="object-cover w-full h-full rounded-md"

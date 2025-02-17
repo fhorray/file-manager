@@ -1,16 +1,16 @@
-import { Trash2Icon } from 'lucide-react';
-import { File } from '../@types/files';
+import { Trash2Icon } from "lucide-react";
+import { File } from "../types/files";
 
-import { useFileManager } from '../contexts/file-manager';
-import { formatBytes } from '../utils/file-manager';
-import { cn } from '../lib/utils';
+import { formatBytes } from "../utils/dosya";
+import { cn } from "../lib/utils";
+import { useDosya } from "../stores/dosya-store";
 
 export const FileRenderer = ({ file }: { file: File }) => {
-  const { selectedFiles, preview, context, layout } = useFileManager();
+  const { selectedFiles, preview, context, layout } = useDosya();
 
   return (
     <div>
-      {layout.style === 'grid' ? (
+      {layout.mode === "grid" ? (
         <div
           className="w-full h-[300px] border border-gray-300 rounded-xl relative cursor-pointer overflow-hidden bg-black hover:scale-105 transition-all"
           onClick={() => {
@@ -20,8 +20,8 @@ export const FileRenderer = ({ file }: { file: File }) => {
           {/* OPTIONS */}
           <div
             className={cn(
-              'w-full flex justify-between absolute top-0 p-4 opacity-0 transition-all hover:opacity-100',
-              selectedFiles.list.find((f) => f.id === file.id) && 'opacity-100',
+              "w-full flex justify-between absolute top-0 p-4 opacity-0 transition-all hover:opacity-100",
+              selectedFiles.list.find((f) => f.id === file.id) && "opacity-100"
             )}
           >
             <input
@@ -36,7 +36,7 @@ export const FileRenderer = ({ file }: { file: File }) => {
                   selectedFiles.set([...selectedFiles.list, file]);
                 if (!checked) {
                   const filtered = selectedFiles.list.filter(
-                    (f) => f.id !== file.id,
+                    (f) => f.id !== file.id
                   );
                   selectedFiles.set(filtered);
                 }
@@ -80,7 +80,7 @@ export const FileRenderer = ({ file }: { file: File }) => {
                   selectedFiles.set([...selectedFiles.list, file]);
                 } else {
                   selectedFiles.set(
-                    selectedFiles.list.filter((f) => f.id !== file.id),
+                    selectedFiles.list.filter((f) => f.id !== file.id)
                   );
                 }
               }}
@@ -93,13 +93,13 @@ export const FileRenderer = ({ file }: { file: File }) => {
                 onChange={(e) => {
                   const checked = e.target.checked;
                   const found = selectedFiles.list.find(
-                    (f) => f.id === file.id,
+                    (f) => f.id === file.id
                   );
                   if (!found && checked)
                     selectedFiles.set([...selectedFiles.list, file]);
                   if (!checked) {
                     const filtered = selectedFiles.list.filter(
-                      (f) => f.id !== file.id,
+                      (f) => f.id !== file.id
                     );
                     selectedFiles.set(filtered);
                   }

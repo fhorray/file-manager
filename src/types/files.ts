@@ -16,7 +16,7 @@ export type Folder = {
   folders: Folder[];
 };
 
-// Tipagem do retorno do put
+// R2 Type
 export interface R2Object {
   key: string;
   version: string;
@@ -27,7 +27,7 @@ export interface R2Object {
   uploaded: Date;
 }
 
-// Tipagem do retorno do list
+// R2 List
 export interface R2ObjectsList {
   objects: R2Object[];
   truncated: boolean;

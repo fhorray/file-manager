@@ -1,19 +1,18 @@
-import { useEffect } from 'react';
-import { useFileManager } from '../contexts/file-manager';
-import { cn } from '../lib/utils';
-import { Breadcrumbs } from './fm-breadcrumb';
-import { Heading } from './fm-heading';
-import { FileManagerList } from './fm-list';
-import { FileManagerPreview } from './fm-preview';
-import { Sidebar } from './fm-sidebar';
+import { useEffect } from "react";
+import { cn } from "../lib/utils";
+import { Breadcrumbs } from "./breadcrumb";
+import { Heading } from "./heading";
+import { Sidebar } from "./sidebar";
 
-import { motion } from 'motion/react';
-import { File } from '../@types/files';
-import { getFiles } from '../utils/get-files';
-import { Viewer } from './fm-viewer';
+import { motion } from "motion/react";
+import { getFiles, getFolders } from "../utils/get-files";
+import { ListItem } from "./list-item";
+import { FileList } from "./file-list";
+import { FilePreview } from "./preview";
+import { useDosya } from "../stores/dosya-store";
 
 const FileManager = () => {
-  const { files, folders, sidebar, selectedFiles } = useFileManager();
+  const { files, sidebar, folders } = useDosya();
 
   useEffect(() => {
     if (files.list?.length) return;
@@ -22,10 +21,16 @@ const FileManager = () => {
     };
 
     fetchFiles();
-  }, []);
+  }, [files]);
 
-  console.log(selectedFiles.list.length);
-  console.log(folders.current.files?.length);
+  useEffect(() => {
+    if (files.list?.length) return;
+    const fetchFfolders = async () => {
+      files.fetch(getFolders);
+    };
+
+    fetchFfolders();
+  }, [folders]);
 
   return (
     <main className="flex h-full">
@@ -34,7 +39,7 @@ const FileManager = () => {
       </div>
 
       <motion.div
-        className={cn('h-full w-full flex flex-col gap-4 !p-8')}
+        className={cn("h-full w-full flex flex-col gap-4 !p-8")}
         initial={{
           marginLeft: sidebar.isOpen ? 310 : 0,
         }}
@@ -42,10 +47,10 @@ const FileManager = () => {
           marginLeft: sidebar.isOpen ? 310 : 0,
         }}
       >
-        <Heading size="xl">Files ({folders.current.files?.length})</Heading>
+        <Heading size="xl">Files (10)</Heading>
         <div className="flex items-center justify-between">
           <Breadcrumbs />
-          <Viewer />
+          <ListItem />
         </div>
 
         <div className="w-full py-4">
@@ -53,33 +58,33 @@ const FileManager = () => {
             <input
               className="w-4 h-4"
               type="checkbox"
-              checked={
-                selectedFiles.list.length === folders.current.files?.length
-              }
-              onChange={(e) => {
-                // get all files from current folder
-                const folderFiles = folders.current.files;
+              // checked={
+              //   selectedFiles.list.length === folders.current.files?.length
+              // }
+              // onChange={(e) => {
+              //   // get all files from current folder
+              //   const folderFiles = folders.current.files;
 
-                if (e.target.checked) {
-                  // Select all files in the current folder
-                  selectedFiles.set(folderFiles as File[]);
-                } else {
-                  // Deselect all files in the current folder
-                  const remainingFiles = selectedFiles.list.filter(
-                    (file) =>
-                      !folderFiles?.some(
-                        (folderFile) => folderFile.id === file.id,
-                      ),
-                  );
-                  selectedFiles.set(remainingFiles);
-                }
-              }}
+              //   if (e.target.checked) {
+              //     // Select all files in the current folder
+              //     selectedFiles.set(folderFiles as File[]);
+              //   } else {
+              //     // Deselect all files in the current folder
+              //     const remainingFiles = selectedFiles.list.filter(
+              //       (file) =>
+              //         !folderFiles?.some(
+              //           (folderFile) => folderFile.id === file.id
+              //         )
+              //     );
+              //     selectedFiles.set(remainingFiles);
+              //   }
+              // }}
             />
             Selecionar todos
           </div>
         </div>
-        <FileManagerList />
-        <FileManagerPreview />
+        <FileList />
+        <FilePreview />
       </motion.div>
     </main>
   );

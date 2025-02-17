@@ -4,84 +4,14 @@ import React, {
   useContext,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
-import { buildFolderStructure, organizeFiles } from '../utils/file-manager';
-import dayjs from 'dayjs';
-import { File, Folder, R2ObjectsList } from '../@types/files';
-
-export type FileManagerConfig = {
-  baseUrl?: string;
-};
-
-export type FileManagerContext = {
-  error?: Error & {
-    isError: boolean;
-  };
-  setError: React.Dispatch<
-    React.SetStateAction<(Error & { isError: boolean }) | undefined>
-  >;
-  baseUrl?: string;
-};
-
-type FileManagerStoreProps = {
-  context: FileManagerContext;
-  layout: {
-    style: 'grid' | 'list';
-    setStyle: React.Dispatch<React.SetStateAction<'grid' | 'list'>>;
-  };
-  path: {
-    current: string;
-    set: React.Dispatch<React.SetStateAction<string>>;
-  };
-  folders: {
-    list: Folder;
-    current: {
-      files: File[];
-    };
-  };
-  files: {
-    list: File[] | null;
-    delete: (
-      key: string,
-      deleteFileFunction: () => Promise<any>,
-    ) => Promise<void>;
-    update: (
-      key: string,
-      deleteFileFunction: () => Promise<any>,
-    ) => Promise<void>;
-    fetch: (
-      fetchFiles: () => Promise<{ data: R2ObjectsList } | undefined>,
-    ) => Promise<void>;
-    upload: (
-      file: File,
-      uploadFileFunction: () => Promise<any>,
-    ) => Promise<void>;
-  };
-
-  preview: {
-    isOpen: boolean;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    file: File | null;
-    setFile: React.Dispatch<React.SetStateAction<File | null>>;
-    clear: () => void;
-  };
-
-  selectedFiles: {
-    list: File[];
-    set: React.Dispatch<React.SetStateAction<File[]>>;
-    clear: () => void;
-    delete: (file: File) => void;
-  };
-
-  sidebar: {
-    isOpen: boolean;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-};
+import { buildFolderStructure, organizeFiles } from "../utils/dosya";
+import dayjs from "dayjs";
+import { File, Folder, R2ObjectsList } from "../types/files";
 
 const FileManagerContext = createContext<FileManagerStoreProps | undefined>(
-  undefined,
+  undefined
 );
 
 const FileManagerProvider = ({
@@ -93,25 +23,25 @@ const FileManagerProvider = ({
 }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [currentPath, setCurrentPath] = useState('/');
+  const [currentPath, setCurrentPath] = useState("/");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
-  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const [layout, setLayout] = useState<"grid" | "list">("grid");
 
-  const [error, setError] = useState<FileManagerContext['error']>({
+  const [error, setError] = useState<FileManagerContext["error"]>({
     isError: false,
-    name: '',
-    message: '',
+    name: "",
+    message: "",
   });
 
   const [filesData, setFilesData] = useState<R2ObjectsList | undefined>(
-    undefined,
+    undefined
   );
 
   // FETCH FILES FROM API
   const fetchFiles = useCallback(
     async (
-      fetchFunction: () => Promise<{ data: R2ObjectsList } | undefined>,
+      fetchFunction: () => Promise<{ data: R2ObjectsList } | undefined>
     ) => {
       try {
         if (fetchFunction) {
@@ -127,7 +57,7 @@ const FileManagerProvider = ({
         }
       }
     },
-    [],
+    []
   );
 
   // DELETE FILE FROM API
@@ -137,7 +67,7 @@ const FileManagerProvider = ({
         await deleteFileFunction(key);
       }
     },
-    [],
+    []
   );
 
   // UPDATE FILE FROM API
@@ -147,7 +77,7 @@ const FileManagerProvider = ({
         await updateFileFunction(key);
       }
     },
-    [],
+    []
   );
 
   // UPDATE FILE FROM API
@@ -157,7 +87,7 @@ const FileManagerProvider = ({
         await uploadFileFunction(file);
       }
     },
-    [],
+    []
   );
 
   const files = useMemo(() => {
@@ -182,7 +112,7 @@ const FileManagerProvider = ({
 
   // CONTEXT OBJECT
   const context: FileManagerContext = {
-    error: error as FileManagerContext['error'],
+    error: error as FileManagerContext["error"],
     setError: setError,
     baseUrl: config?.baseUrl,
   };
@@ -212,11 +142,11 @@ const FileManagerProvider = ({
           list: folders,
           current: {
             files: files?.filter((file) => {
-              const splited = file.path.split('/');
+              const splited = file.path.split("/");
 
               splited.shift();
 
-              return splited.join('/').startsWith(currentPath);
+              return splited.join("/").startsWith(currentPath);
             }),
           },
         },

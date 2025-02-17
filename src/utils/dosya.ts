@@ -1,20 +1,20 @@
-import { Folder, File } from '../@types/files';
+import { Folder, File } from "../types/files";
 
 // function to organize file keys
 export const organizeFiles = (
-  keys: { key: string; size?: number; lastModified?: string }[],
+  keys: { key: string; size?: number; lastModified?: string }[]
 ): File[] => {
   const files: File[] = [];
   const dirMap = new Map<string, string>(); // Mapeia caminhos para IDs
 
   keys?.forEach(({ key, size, lastModified }) => {
-    const parts = key.split('/');
+    const parts = key.split("/");
     let parentId: string | undefined = undefined;
-    let currentPath = '';
+    let currentPath = "";
 
     for (let i = 0; i < parts.length; i++) {
       const name = parts[i];
-      currentPath += (i > 0 ? '/' : '') + name;
+      currentPath += (i > 0 ? "/" : "") + name;
       const isLast = i === parts.length - 1;
       const id = btoa(currentPath); // Criando um ID único com Base64
 
@@ -52,15 +52,15 @@ export const organizeFiles = (
 
 export const buildFolderStructure = (files: File[]): Folder => {
   const root: Folder = {
-    id: 'root',
-    name: 'Root',
-    path: '',
+    id: "root",
+    name: "Root",
+    path: "",
     files: [],
     folders: [],
   };
 
   files?.forEach((file) => {
-    const pathParts = file.path.split('/').filter(Boolean); // Divide e remove strings vazias
+    const pathParts = file.path.split("/").filter(Boolean); // Divide e remove strings vazias
     pathParts.shift(); // remove 'files/' from URL
     const fileName = pathParts.pop(); // Remove nome do arquivo do path
 
@@ -76,7 +76,7 @@ export const buildFolderStructure = (files: File[]): Folder => {
         existingFolder = {
           id: file.id,
           name: part,
-          path: currentFolder.path + part + '/',
+          path: currentFolder.path + part + "/",
           files: [], // Inicialmente sem arquivos
           folders: [],
         };
@@ -98,15 +98,15 @@ export const buildFolderStructure = (files: File[]): Folder => {
 
 export const formatBytes = (
   bytes: number | string,
-  decimals?: number,
+  decimals?: number
 ): string => {
-  const parsed = typeof bytes === 'string' ? parseInt(bytes) : bytes;
+  const parsed = typeof bytes === "string" ? parseInt(bytes) : bytes;
 
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return "0 Bytes";
 
   const k = 1024;
   const dm = decimals ?? 2 < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const i = Math.floor(Math.log(parsed) / Math.log(k));
 
   const value = parseFloat((parsed / Math.pow(k, i)).toFixed(dm));
