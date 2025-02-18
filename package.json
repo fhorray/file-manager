@@ -1,31 +1,30 @@
 {
   "name": "@fhorray/dosya",
   "private": false,
-  "version": "0.0.6",
+  "version": "0.0.12",
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./types": {
-      "types": "./dist/types.d.ts"
-    }
-  },
   "scripts": {
     "dev": "vite --port 3000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "rollup": "rollup -c"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts"
+    }
   },
   "dependencies": {
     "@babel/preset-react": "^7.26.3",
