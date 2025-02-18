@@ -9,7 +9,7 @@ import external from 'rollup-plugin-peer-deps-external';
 import dts from 'rollup-plugin-dts';
 
 export default [
-  // Configuração para compilar o código JS
+  // Configuração para compilar o código JavaScript (ESM + CJS)
   {
     input: 'src/index.ts',
     output: [
@@ -30,19 +30,21 @@ export default [
       resolve(),
       commonjs(),
       json(),
+
       alias({
         entries: [
           {
             find: '../dosya.config',
             replacement: process.cwd() + '/dosya.config.ts',
-          },
+          }, // Melhorando o alias
+          { find: '@libs', replacement: process.cwd() + '/src/libs' }, // Adicionando alias útil
         ],
       }),
       typescript({
         tsconfig: './tsconfig.json',
         declaration: true,
-        declarationDir: 'dist/types',
-        emitDeclarationOnly: false, // Gera tanto JS quanto declarações
+        outDir: 'dist', // Corrigido para garantir saída correta
+        emitDeclarationOnly: false,
         include: ['src/**/*.ts', 'src/**/*.tsx'],
       }),
       babel({
@@ -54,11 +56,20 @@ export default [
       terser(),
     ],
   },
-  // Configuração para processar os arquivos de tipo `.d.ts`
+  // Configuração para gerar os arquivos de tipos `.d.ts`
   {
     input: 'src/index.ts',
     output: {
       file: 'dist/index.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  // Configuração adicional para tipos específicos
+  {
+    input: 'src/types.ts',
+    output: {
+      file: 'dist/types/index.d.ts',
       format: 'es',
     },
     plugins: [dts()],
