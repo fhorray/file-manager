@@ -1,26 +1,40 @@
-import { create } from "zustand";
-import { DosyaStoreProps } from "../types/dosya";
-import { File, Folder, R2ObjectsList } from "../types/files";
-import dayjs from "dayjs";
-import { organizeFiles } from "../utils/dosya";
+import { create } from 'zustand';
+import { DosyaConfigProps, DosyaStoreProps } from '../types/dosya';
+import { File, Folder, R2ObjectsList } from '../types/files';
+import dayjs from 'dayjs';
+import { organizeFiles } from '../utils/dosya';
+import { useEffect } from 'react';
 
-export const useDosya = create<DosyaStoreProps>((set) => ({
+export const useDosyaStore = create<DosyaStoreProps>((set) => ({
+  config: {
+    values: {
+      signedUrl: undefined,
+    },
+    set: (config: DosyaConfigProps) =>
+      set((state) => ({
+        config: {
+          ...state.config,
+          values: config,
+        },
+      })),
+  },
+
   // CONTEXT
   context: {
     error: {
       isError: false,
-      message: "",
-      name: "",
-      stack: "",
+      message: '',
+      name: '',
+      stack: '',
     },
     setError: () => {},
-    baseUrl: "https://media.grupometrcasa.com",
+    baseUrl: 'https://media.grupometrcasa.com',
   },
 
   // UI
   layout: {
-    mode: "grid",
-    set: (mode: "grid" | "list") =>
+    mode: 'grid',
+    set: (mode: 'grid' | 'list') =>
       set((state) => ({
         layout: {
           mode: mode,
@@ -118,12 +132,12 @@ export const useDosya = create<DosyaStoreProps>((set) => ({
 
   // FOLDERS
   folders: {
-    current: "test",
+    current: 'test',
     list: [],
     fetch: async (fetchFolders: () => Promise<{ data: Folder[] }>) => {
       try {
         const result = await fetchFolders();
-        console.log("RETRIEVED FOLDERS: ");
+        console.log('RETRIEVED FOLDERS: ');
         console.log(result);
         // if (result?.data) {
         //   set((state) => ({
@@ -151,7 +165,7 @@ export const useDosya = create<DosyaStoreProps>((set) => ({
 
   // PATH
   path: {
-    current: "",
+    current: '',
     set: (path: string) =>
       set((state) => ({
         path: {
@@ -182,3 +196,19 @@ export const useDosya = create<DosyaStoreProps>((set) => ({
     toggle: () => {},
   },
 }));
+
+export const useDosya = () => {
+  const store = useDosyaStore();
+
+  return {
+    // config: store.config,
+    context: store.context,
+    layout: store.layout,
+    folders: store.folders,
+    files: store.files,
+    path: store.path,
+    preview: store.preview,
+    selectedFiles: store.selectedFiles,
+    sidebar: store.sidebar,
+  };
+};

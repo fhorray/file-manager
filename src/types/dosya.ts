@@ -1,14 +1,19 @@
-import { File, Folder, R2ObjectsList } from "./files";
+import { File, Folder, R2ObjectsList } from './files';
+
+// DOSYA CONFIG
+export type DosyaConfigProps = {
+  signedUrl: string | undefined;
+};
+
+export type DosyaConfig = {
+  values: DosyaConfigProps;
+  set: (config: DosyaConfigProps) => void;
+};
 
 // CONTEXT
 export type DosyaContext = {
   error?: DosyaError;
   setError?: (error: DosyaError) => void;
-  baseUrl?: string;
-};
-
-// DOSYA CONFIG
-export type DosyaConfig = {
   baseUrl?: string;
 };
 
@@ -19,8 +24,8 @@ export type DosyaError = Error & {
 
 // LAYOUT
 export type DosyaLayout = {
-  mode: "grid" | "list";
-  set: (mode: "grid" | "list") => void;
+  mode: 'grid' | 'list';
+  set: (mode: 'grid' | 'list') => void;
 };
 
 // PATH
@@ -76,6 +81,7 @@ export type DosyaSidebar = {
 
 // STORE
 export type DosyaStoreProps = {
+  config: DosyaConfig;
   context: DosyaContext;
   layout: DosyaLayout;
   path: DosyaPath;

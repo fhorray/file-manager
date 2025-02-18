@@ -1,11 +1,11 @@
-import { ChevronLeftIcon, ChevronRightIcon, SearchIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, SearchIcon } from 'lucide-react';
 
-import { FolderTree } from "./folder-tree";
-import { Heading } from "./heading";
+import { FolderTree } from './folder-tree';
+import { Heading } from './heading';
 
-import { motion } from "motion/react";
-import { cn } from "../lib/utils";
-import { useDosya } from "../stores/dosya-store";
+import { motion } from 'motion/react';
+import { cn } from '../lib/utils';
+import { useDosya } from '../stores/dosya-store';
 
 export const Sidebar = () => {
   const { sidebar } = useDosya();
@@ -28,8 +28,8 @@ export const Sidebar = () => {
 
       <motion.aside
         className={cn(
-          "w-full flex flex-col gap-4 bg-gray-100 h-full border-r-2 border-gray-300 overflow-y-auto z-20",
-          sidebar.isOpen && "p-0"
+          'w-full flex flex-col gap-4 bg-gray-100 h-full border-r-2 border-gray-300 overflow-y-auto z-20',
+          sidebar.isOpen && 'p-0',
         )}
         initial={{
           width: sidebar.isOpen ? 300 : 0,
@@ -51,7 +51,7 @@ export const Sidebar = () => {
         <div className="w-full p-4">
           {/* FOLDER TREE */}
           <Heading className="uppercase">Folders</Heading>
-          {/* <FolderTree /> */}
+          <FolderTree />
         </div>
       </motion.aside>
     </div>

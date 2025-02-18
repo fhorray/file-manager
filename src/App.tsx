@@ -1,19 +1,15 @@
-import FileManager from "./components";
-import {
-  FileManagerConfig,
-  FileManagerProvider,
-} from "./contexts/file-manager";
+import { config } from '../dosya.config';
+import FileManager from './components';
 
-const config = {
-  baseUrl: "https://media.grupometrocasa.com",
-} satisfies FileManagerConfig;
+import { DosyaProvider } from './providers/dosya-provider';
+import { DosyaConfigProps } from './types/dosya';
 
 function App() {
   return (
     <>
-      <FileManagerProvider config={config}>
+      <DosyaProvider>
         <FileManager />
-      </FileManagerProvider>
+      </DosyaProvider>
     </>
   );
 }
