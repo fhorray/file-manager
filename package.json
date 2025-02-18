@@ -1,7 +1,7 @@
 {
   "name": "@fhorray/dosya",
   "private": false,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -11,8 +11,14 @@
   ],
   "exports": {
     "./package.json": "./package.json",
-    "./libs/type": "./dist/types/index.d.ts",
-    "./libs/*": "./dist/*"
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts"
+    }
   },
   "scripts": {
     "dev": "vite --port 3000",
