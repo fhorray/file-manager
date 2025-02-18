@@ -1,15 +1,15 @@
-import { useEffect } from "react";
-import { cn } from "../lib/utils";
-import { Breadcrumbs } from "./breadcrumb";
-import { Heading } from "./heading";
-import { Sidebar } from "./sidebar";
+import { useEffect } from 'react';
+import { cn } from '../lib/utils';
+import { Breadcrumbs } from './breadcrumb';
+import { Heading } from './heading';
+import { Sidebar } from './sidebar';
 
-import { motion } from "motion/react";
-import { getFiles, getFolders } from "../utils/get-files";
-import { ListItem } from "./list-item";
-import { FileList } from "./file-list";
-import { FilePreview } from "./preview";
-import { useDosya } from "../stores/dosya-store";
+import { motion } from 'motion/react';
+import { getFiles, getFolders } from '../utils/get-files';
+import { ListItem } from './list-item';
+import { FileList } from './file-list';
+import { FilePreview } from './preview';
+import { useDosya } from '../stores/dosya-store';
 
 const FileManager = () => {
   const { files, sidebar, folders } = useDosya();
@@ -26,6 +26,7 @@ const FileManager = () => {
   useEffect(() => {
     if (files.list?.length) return;
     const fetchFfolders = async () => {
+      //@ts-ignore
       files.fetch(getFolders);
     };
 
@@ -39,7 +40,7 @@ const FileManager = () => {
       </div>
 
       <motion.div
-        className={cn("h-full w-full flex flex-col gap-4 !p-8")}
+        className={cn('h-full w-full flex flex-col gap-4 !p-8')}
         initial={{
           marginLeft: sidebar.isOpen ? 310 : 0,
         }}

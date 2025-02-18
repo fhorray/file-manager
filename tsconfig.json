@@ -8,7 +8,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "outDir": "dist",
+    "declaration": true,
     "emitDeclarationOnly": false,
+    "declarationDir": "dist/types",
     "sourceMap": false,
     "jsx": "react-jsx",
     "moduleResolution": "node",
@@ -23,5 +25,4 @@
       "dosya.config": ["src/dosya.config.ts"]
     }
   },
-  "exclude": ["node_modules", "dist"]
 }
